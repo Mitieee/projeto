@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include 'sql.php';
 session_start();
 if (!isset($_SESSION['email'])) {
     header("Location: conta.php");
@@ -37,6 +37,7 @@ $conn->close();
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chamada de Emergência</title>
     <link rel="icon" href="imagem/emergencia.png" type="image/x-icon">
     <style>

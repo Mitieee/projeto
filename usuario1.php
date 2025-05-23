@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include 'sql.php';
 session_start();
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['latitude']) && isset($_POST['longitude']) && isset($_POST['atualizar_localizacao'])) {
     if (!isset($_SESSION['id_usuario'])) {
@@ -134,6 +134,7 @@ $conn->close();
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Usuário 1 - Localização Compartilhada</title>
     <link rel="icon" href="imagem/emergencia.png" type="image/x-icon">
     <style>

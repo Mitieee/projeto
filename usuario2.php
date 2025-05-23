@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include 'sql.php';
 session_start();
 if (isset($_GET['status_acao'])) {
     header('Content-Type: application/json');
@@ -93,6 +93,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <title>Usuário 2 - Localização Compartilhada</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="imagem/emergencia.png" type="image/x-icon">
     <style>
         #map { 
