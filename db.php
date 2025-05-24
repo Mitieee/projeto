@@ -2,10 +2,10 @@
 $url = getenv("JAWSDB_URL");
 $dbparts = parse_url($url);
 
-$host = $dbparts['host'];       
-$user = $dbparts['user'];       
-$pass = $dbparts['pass'];       
-$dbname = ltrim($dbparts['path'], '/'); 
+$host = $dbparts['qn66usrj1lwdk1cc.cbetxkdyhwsb.us-east-1.rds.amazonaws.com'];       
+$user = $dbparts['bcgq92tgn5llinno'];       
+$pass = $dbparts['g8buzhryqff6f4m5'];       
+$dbname = ltrim($dbparts['jl3ov1glq3jyb7au'], '/'); 
 
 $conn = new mysqli($host, $user, $pass, $dbname);
 
