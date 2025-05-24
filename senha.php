@@ -1,5 +1,5 @@
 <?php
-include 'sql.php'; 
+include 'db.php'; 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $novaSenha = $_POST["senha"];

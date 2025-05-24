@@ -99,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <form method="POST" action="conta.php">
             <div class="grupo">
                 <img src="imagem/email.png" alt="Ícone Email">
-                <input type="email" name="email" id="email" placeholder="Seu email" required>
+                <input type="email" name="email" id="email" placeholder="Seu e-mail" required>
             </div>
             <div class="grupo">
                 <img src="imagem/senha.png" alt="Ícone Senha">

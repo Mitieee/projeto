@@ -1,5 +1,5 @@
 <?php
-include 'sql.php';
+include 'db.php';
 session_start();
 if (isset($_GET['status_acao'])) {
     header('Content-Type: application/json');
