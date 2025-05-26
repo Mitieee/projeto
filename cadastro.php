@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt_check->execute();
     $stmt_check->store_result();
     if ($stmt_check->num_rows > 0) {
-        $error = "Erro: Este email já está cadastrado.";
+        $error = "Erro: Este e-mail já está cadastrado.";
         $stmt_check->close();
     } else {
         $stmt_check->close();
