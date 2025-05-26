@@ -98,7 +98,7 @@ $conn->close();
     <div class="container">
         <?php if ($usuario) { ?>
             <h2>Informações do Usuário</h2>
-             <p><strong>Email:</strong> <?= htmlspecialchars($usuario['email']); ?></p>
+             <p><strong>E-mail:</strong> <?= htmlspecialchars($usuario['email']); ?></p>
             <p><strong>Telefone:</strong> <?= htmlspecialchars($usuario['telefone']); ?></p>
             <p><strong>Nome:</strong> <?= htmlspecialchars($usuario['nome']); ?></p>
             <p><strong>Data de Nascimento:</strong> 
