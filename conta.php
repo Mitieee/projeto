@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error = "Senha incorreta.";
         }
     } else {
-        $error = "Email não cadastrado. Por favor, cadastre-se primeiro.";
+        $error = "E-mail não cadastrado. Por favor, cadastre-se primeiro.";
     }
     $stmt->close();
     $conn->close();
@@ -98,11 +98,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
 <form method="POST" action="conta.php">
             <div class="grupo">
-                <img src="imagem/email.png" alt="Ícone Email">
+                <img src="imagem/email.png" alt="E-mail">
                 <input type="email" name="email" id="email" placeholder="Seu e-mail" required>
             </div>
             <div class="grupo">
-                <img src="imagem/senha.png" alt="Ícone Senha">
+                <img src="imagem/senha.png" alt="Senha">
                 <input type="password" name="senha" id="senha" placeholder="Sua senha" required>
             </div>
             <button type="submit">Entrar</button>

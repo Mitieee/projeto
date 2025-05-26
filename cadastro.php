@@ -111,27 +111,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
         <form action="cadastro.php" method="POST" onsubmit="return validarFormulario()">
             <div class="grupo">
-                <img src="imagem/email.png" alt="Ícone Email">
-                <input type="email" name="email" id="email" placeholder="Seu email" required>
+                <img src="imagem/email.png" alt="E-mail">
+                <input type="email" name="email" id="email" placeholder="Seu e-mail" required>
             </div>
             <div class="grupo">
-                <img src="imagem/senha.png" alt="Ícone Senha">
+                <img src="imagem/senha.png" alt="Senha">
                 <input type="password" name="senha" id="senha" placeholder="Sua senha" required>
             </div>
             <div class="grupo">
-                <img src="imagem/telefone.png" alt="Ícone Telefone">
+                <img src="imagem/telefone.png" alt="Telefone">
                 <input type="tel" name="telefone" id="telefone" placeholder="00000000000" required>
             </div>
             <div class="grupo">
-                <img src="imagem/nome.png" alt="Ícone Nome">
+                <img src="imagem/nome.png" alt="Nome">
                 <input type="text" name="nome" id="nome" placeholder="Nome completo" required>
             </div>
             <div class="grupo">
-                <img src="imagem/nascimento.png" alt="Ícone Data de Nascimento">
+                <img src="imagem/nascimento.png" alt="Data de Nascimento">
                 <input type="date" name="data_nascimento" id="data_nascimento" required>
             </div>
             <div class="grupo">
-                <img src="imagem/sangue.avif" alt="Ícone Tipo Sanguíneo">
+                <img src="imagem/sangue.avif" alt="Tipo Sanguíneo">
                 <select name="tipo" id="tipo" required>
                     <option value="" disabled selected>Tipo sanguíneo</option>
                     <option value="A+">A+</option>
@@ -145,11 +145,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </select>
             </div>
             <div class="grupo">
-                <img src="imagem/peso.png" alt="Ícone Peso">
+                <img src="imagem/peso.png" alt="Peso">
                 <input type="text" name="peso" id="peso" placeholder="Peso (kg)" required>
             </div>
             <div class="grupo">
-                <img src="imagem/altura.png" alt="Ícone Altura">
+                <img src="imagem/altura.png" alt="Altura">
                 <input type="text" name="altura" id="altura" placeholder="Altura (cm)" required>
             </div>
             <div class="grupo">
@@ -192,7 +192,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             const apenasPesoRegex = /^\d{1,3},\d{2}$/;
             const alturaRegex = /^\d{1,3},\d{2}$/;
             if (!emailRegex.test(email)) {
-                alert("Por favor, insira um email válido.");
+                alert("Por favor, insira um e-mail válido.");
                 return false;
             }
             if (senha.length < 6) {

@@ -116,7 +116,7 @@ $conn->close();
         <a href="cadastro.php" style="text-decoration: none; font-size: 1.5em;">Criar conta</a> <br>
         <h2>Editar Dados</h2>
         <div class="email">
-            Email: <?php echo htmlspecialchars($usuario['email']); ?>
+            E-mail: <?php echo htmlspecialchars($usuario['email']); ?>
         </div>
         <?php if (!empty($error)): ?>
             <div class="error"><?php echo $error; ?></div>
@@ -125,19 +125,19 @@ $conn->close();
                     <div class="grupo"> 
             </div>
             <div class="grupo">
-                <img src="imagem/telefone.png" alt="Ícone Telefone">
+                <img src="imagem/telefone.png" alt="Telefone">
                <input type="tel" name="telefone" id="telefone" placeholder="00000000000" value="<?php echo htmlspecialchars($usuario['telefone']); ?>" required>
             </div>
         <div class="grupo">
-                <img src="imagem/nome.png" alt="Ícone Nome">
+                <img src="imagem/nome.png" alt="Nome">
                 <input type="text" name="nome" id="nome" value="<?php echo htmlspecialchars($usuario['nome']); ?>" placeholder="Nome completo" required>
             </div>
             <div class="grupo">
-                <img src="imagem/nascimento.png" alt="Ícone Data de Nascimento">
+                <img src="imagem/nascimento.png" alt="Data de Nascimento">
                 <input type="date" name="data_nascimento" id="data_nascimento" value="<?php echo htmlspecialchars($usuario['data_nascimento']); ?>" required>
             </div>
             <div class="grupo">
-                <img src="imagem/sangue.avif" alt="Ícone Tipo Sanguíneo">
+                <img src="imagem/sangue.avif" alt="Tipo Sanguíneo">
                 <select name="tipo" id="tipo" required>
                     <option value="" disabled>Tipo sanguíneo</option>
                     <?php
@@ -150,11 +150,11 @@ $conn->close();
                 </select>
             </div>
             <div class="grupo">
-                <img src="imagem/peso.png" alt="Ícone Peso">
+                <img src="imagem/peso.png" alt="Peso">
                 <input type="text" name="peso" id="peso" value="<?php echo htmlspecialchars(str_replace(".", ",", $usuario['peso'])); ?>" placeholder="Peso (kg)" required>
             </div>
             <div class="grupo">
-                <img src="imagem/altura.png" alt="Ícone Altura">
+                <img src="imagem/altura.png" alt="Altura">
                 <input type="text" name="altura" id="altura" value="<?php echo htmlspecialchars(str_replace(".", ",", $usuario['altura'])); ?>" placeholder="Altura (cm)" required>
             </div>
             <div class="grupo">
