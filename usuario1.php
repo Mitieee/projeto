@@ -1,4 +1,5 @@
 <?php
+$key = getenv('Key');
 include 'db.php';
 session_start();
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['latitude']) && isset($_POST['longitude']) && isset($_POST['atualizar_localizacao'])) {
@@ -233,7 +234,7 @@ $conn->close();
             <button type="button" id="enviar-mensagem">Enviar</button>
         </form>
     </div>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRBSBAaigi9bXciRac67nXCRO665QCeZI&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<?= $key ?>&callback=initMap" async defer></script>
     <script> 
         let mapa, marcaUsuario1, marcaUsuario2;
         function initMap() {
