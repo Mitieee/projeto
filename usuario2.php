@@ -1,5 +1,5 @@
 <?php
-$key = getenv('Key');
+echo "" . getenv('Key');
 include 'db.php';
 session_start();
 if (isset($_GET['status_acao'])) {
@@ -245,7 +245,7 @@ $conn->close();
         <?php endif; ?>
     </div>
     <?php if ($emergencia_selecionada && $emergencia_selecionada['latitude'] && $emergencia_selecionada['longitude']): ?>
-   <script src="https://maps.googleapis.com/maps/api/js?key=<?= htmlspecialchars($key) ?>&callback=initMap"async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=<?= getenv('Key') ?>&callback=initMap" async defer></script>
     <script>     
         let mapa, marcaUsuario1, marcaUsuario2;
         function initMap() {
