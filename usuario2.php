@@ -245,7 +245,7 @@ $conn->close();
         <?php endif; ?>
     </div>
     <?php if ($emergencia_selecionada && $emergencia_selecionada['latitude'] && $emergencia_selecionada['longitude']): ?>
-    <script src="https://maps.googleapis.com/maps/api/js?key=<?= $key ?>&callback=initMap" async defer></script>
+   <script src="https://maps.googleapis.com/maps/api/js?key=<?= htmlspecialchars($key) ?>&callback=initMap"async defer></script>
     <script>     
         let mapa, marcaUsuario1, marcaUsuario2;
         function initMap() {
