@@ -447,8 +447,4 @@ function cancelarMensagem(idMensagem, elemento) {
     <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
     <script>new window.VLibras.Widget('https://vlibras.gov.br/app');</script>
 </body>
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> 76b7e718772110a78d18ae705a7ce47a67d4a4ed
