@@ -1,7 +1,7 @@
 <?php
-  $apiKey = getenv('Key');
 include 'db.php';
 session_start();
+ $apiKey = getenv('Key');
 if (isset($_GET['status_acao'])) {
     header('Content-Type: application/json');
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_emergencia']) && isset($_POST['status'])) {

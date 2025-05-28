@@ -1,7 +1,7 @@
 <?php
-  $apiKey = getenv('Key');
 include 'db.php';
 session_start();
+ $apiKey = getenv('Key');
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['latitude']) && isset($_POST['longitude']) && isset($_POST['atualizar_localizacao'])) {
     if (!isset($_SESSION['id_usuario'])) {
         header("HTTP/1.1 401 Unauthorized");
