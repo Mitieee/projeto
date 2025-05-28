@@ -234,7 +234,7 @@ $conn->close();
             <button type="button" id="enviar-mensagem">Enviar</button>
         </form>
     </div>
-   <script async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo $apiKey; ?>&callback=initMap"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo $apiKey; ?>&callback=initMap"></script>
     <script> 
         let mapa, marcaUsuario1, marcaUsuario2;
         function initMap() {
