@@ -1,3 +1,6 @@
+<?php
+  $apiKey = getenv('Key');
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -12,7 +15,7 @@
   </style>
 </head>
 <body>
-  <h1>teste</h1>
+  <h1>Mapa</h1>
   <div id="map"></div>
 
   <script>
@@ -45,21 +48,18 @@
             });
           },
           function () {
-            alert("Permissão de localização negada ou erro ao obter localização.");
+            alert("Permissão negada ou erro ao obter localização.");
           }
         );
       } else {
-        alert("Geolocalização não é suportada neste navegador.");
+        alert("Geolocalização não suportada neste navegador.");
       }
     }
 
     window.initMap = initMap;
   </script>
 
-  <script
-    async
-    defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAYL87be8vkNduKrolC_micH2ADQu0xHI&callback=initMap"
-  ></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo $apiKey; ?>&callback=initMap"></script>
 </body>
 </html>
+
