@@ -247,7 +247,6 @@ $conn->close();
                             lat: parseFloat(localizacao.latitude),
                             lng: parseFloat(localizacao.longitude)
                         };
-                        
                         if (marcaUsuario1) {
                             marcaUsuario1.setPosition(coordenadas);
                         }
@@ -271,7 +270,7 @@ $conn->close();
             }).catch(error => console.error("Erro ao enviar resposta:", error));
         }); 
         function atualizarChat() {
-            fetch(`usuario2.php?id_emergencia=<?= $id_emergencia ?>&obter_mensagens=1`)
+            fetch(`usuario1.php?id_emergencia=<?= $id_emergencia ?>&obter_mensagens=1`)
                 .then(response => response.json())
                 .then(mensagens => {
                     const chatBox = document.getElementById('chat-box');           
