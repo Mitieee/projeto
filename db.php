@@ -10,4 +10,5 @@ if ($conn->connect_error) {
     die("Erro na conexão com o banco de dados: " . $conn->connect_error);
 }
 date_default_timezone_set('America/Sao_Paulo'); 
+$conn->query("SET time_zone = 'America/Sao_Paulo'");
 ?>
