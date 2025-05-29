@@ -1,7 +1,7 @@
 <?php
 include 'db.php';
 session_start();
- $apiKey = getenv('Key');
+$apiKey = getenv('Key');
 if (isset($_GET['status_acao'])) {
     header('Content-Type: application/json');
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_emergencia']) && isset($_POST['status'])) {
@@ -36,6 +36,21 @@ if (isset($_GET['status_acao'])) {
     }   
     echo json_encode(['success' => false]);
     $conn->close();
+    exit();
+}
+if (isset($_GET['obter_localizacao_usuario1'])) {
+    header('Content-Type: application/json');
+    $id_emergencia = $_GET['id_emergencia'];
+    $sql = "SELECT latitude, longitude FROM emergencias 
+            WHERE id = ? AND id_usuario IN 
+            (SELECT id_usuario FROM emergencias WHERE id = ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $id_emergencia, $id_emergencia);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $localizacao = $result->fetch_assoc();
+    $stmt->close();
+    echo json_encode($localizacao);
     exit();
 }
 if (!isset($_SESSION['id_usuario'])) {
@@ -97,113 +112,39 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="imagem/emergencia.png" type="image/x-icon">
     <style>
-        #map { 
-            height: 450px; 
-            width: 100%; }
-        body { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            margin: 0; 
-            font-family: Arial }
-        .container { 
-            max-width: 400px; 
-            padding: 20px; 
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
-            text-align: center; }
-        .img { 
-            height: 30px; 
-            width: 30px; 
-            cursor: pointer; }
-        .chat-box { 
-            margin-top: 20px; 
-            border: 1px solid #ddd; 
-            border-radius: 5px; 
-            padding: 10px; 
-            height: 200px; 
-            overflow-y: auto; 
-            background-color: #f9f9f9; }
-        .chat-input { 
-            margin-top: 10px; 
-            display: flex; 
-            gap: 10px; }
-        .chat-input input { 
-            flex: 1; 
-            padding: 5px; 
-            border: 1px solid #ddd; 
-            border-radius: 5px; }
-        .chat-input button { 
-            padding: 5px 10px; 
-            border: none; 
-            background-color: #007BFF; 
-            color: white; 
-            border-radius: 5px; 
-            cursor: pointer; }
-        .chat-input button:hover { 
-            background-color: #0056b3; }
-        .emergencias-lista { 
-            display: flex; 
-            flex-wrap: wrap; 
-            gap: 10px; 
-            margin-bottom: 20px; }
-        .emergencia-card { 
-            border: 1px solid #ddd; 
-            border-radius: 5px; 
-            padding: 10px; 
-            width: calc(33% - 20px); 
-            cursor: pointer; }
-        .emergencia-card:hover { 
-            background-color: #f5f5f5; }
-        .emergencia-card.selecionada { 
-            border-color: #007BFF; 
-            background-color: #e7f1ff; }
-        .emergencia-card h3 { 
-            margin-top: 0; }
-        .emergencia-info { 
-            display: flex; 
-            justify-content: space-between; }
-        .status-buttons { 
-            margin-top: 10px; 
-            display: flex; 
-            gap: 10px; }
-        .status-buttons button { 
-            padding: 5px 10px; 
-            border: none; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            color: white; }
-        .status-buttons .atendimento { 
-            background-color: #17a2b8; }
-        .status-buttons .resolvida { 
-            background-color: #28a745; }
-        .status { 
-            font-weight: bold; 
-            margin: 10px 0; }
-        .status.atendimento { 
-            color: #17a2b8; }
-        .status.resolvida { 
-            color: #28a745; }
-        .info-usuario { 
-            background-color: #f8f9fa; 
-            padding: 15px; 
-            border-radius: 5px; 
-            margin-bottom: 20px; }
-        .info-usuario h3 { 
-            margin-top: 0; 
-            color: #007BFF; }
-        .info-item { 
-            margin-bottom: 5px; }
-        .message-content { 
-            margin-bottom: 5px; }
-        .data-hora { 
-            font-size: 0.8em; 
-            color: #666; }
+        #map { height: 450px; width: 100%; }
+        body { display: flex; flex-direction: column; align-items: center; margin: 0; font-family: Arial }
+        .container { max-width: 400px; padding: 20px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); text-align: center; }
+        .img { height: 30px; width: 30px; cursor: pointer; }
+        .chat-box { margin-top: 20px; border: 1px solid #ddd; border-radius: 5px; padding: 10px; height: 200px; overflow-y: auto; background-color: #f9f9f9; }
+        .chat-input { margin-top: 10px; display: flex; gap: 10px; }
+        .chat-input input { flex: 1; padding: 5px; border: 1px solid #ddd; border-radius: 5px; }
+        .chat-input button { padding: 5px 10px; border: none; background-color: #007BFF; color: white; border-radius: 5px; cursor: pointer; }
+        .chat-input button:hover { background-color: #0056b3; }
+        .emergencias-lista { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .emergencia-card { border: 1px solid #ddd; border-radius: 5px; padding: 10px; width: calc(33% - 20px); cursor: pointer; }
+        .emergencia-card:hover { background-color: #f5f5f5; }
+        .emergencia-card.selecionada { border-color: #007BFF; background-color: #e7f1ff; }
+        .emergencia-card h3 { margin-top: 0; }
+        .emergencia-info { display: flex; justify-content: space-between; }
+        .status-buttons { margin-top: 10px; display: flex; gap: 10px; }
+        .status-buttons button { padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; color: white; }
+        .status-buttons .atendimento { background-color: #17a2b8; }
+        .status-buttons .resolvida { background-color: #28a745; }
+        .status { font-weight: bold; margin: 10px 0; }
+        .status.atendimento { color: #17a2b8; }
+        .status.resolvida { color: #28a745; }
+        .info-usuario { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .info-usuario h3 { margin-top: 0; color: #007BFF; }
+        .info-item { margin-bottom: 5px; }
+        .message-content { margin-bottom: 5px; }
+        .data-hora { font-size: 0.8em; color: #666; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Usuário 2 - Localização Compartilhada</h1>
-        <div class= "emergencias-lista" id="emergencias-lista">
+        <div class="emergencias-lista" id="emergencias-lista">
             <?php foreach ($emergencias as $emergencia): ?>              
                 <div class="emergencia-card <?= $emergencia['id'] == $id_emergencia ? 'selecionada' : '' ?>" 
                      onclick="window.location.href='usuario2.php?id_emergencia=<?= $emergencia['id'] ?>'">
@@ -211,8 +152,8 @@ $conn->close();
                     <div class="emergencia-info">
                         <span><?= date('d/m/Y H:i', strtotime($emergencia['data_hora'])) ?></span>
                     </div>   
-                 <br>   <strong><?= htmlspecialchars($emergencia['tipo_emergencia']) ?></strong>    
-                   </div>
+                    <br><strong><?= htmlspecialchars($emergencia['tipo_emergencia']) ?></strong>    
+                </div>
             <?php endforeach; ?>
         </div>       
         <?php if ($emergencia_selecionada): ?>
@@ -252,11 +193,24 @@ $conn->close();
             const localizacaoEmergencia = {
                 lat: <?= $emergencia_selecionada['latitude'] ?>,
                 lng: <?= $emergencia_selecionada['longitude'] ?>
-            };
+            };            
             mapa = new google.maps.Map(document.getElementById('map'), {
                 center: localizacaoEmergencia,
                 zoom: 15
             });
+            marcaUsuario1 = new google.maps.Marker({
+                position: localizacaoEmergencia,
+                map: mapa,
+                title: "usuário"
+            });           
+            new google.maps.InfoWindow({
+                content: `
+                    <div>
+                        <strong>Telefone:</strong> <?= $emergencia_selecionada['telefone'] ?><br>
+                        <strong>Nome:</strong> <?= $emergencia_selecionada['nome'] ?>
+                    </div>
+               `
+            }).open(mapa, marcaUsuario1);
             if (navigator.geolocation) {
                 navigator.geolocation.watchPosition(
                     (posicao) => {
@@ -273,9 +227,8 @@ $conn->close();
                             new google.maps.InfoWindow({ content: "Você está aqui" }).open(mapa, marcaUsuario2);
                         } else {
                             marcaUsuario2.setPosition(coordenadas);
-                        }                       
+                        }
                         mapa.setCenter(coordenadas);
-                        localStorage.setItem('localizacaoUsuario2', JSON.stringify(coordenadas));
                     },
                     (erro) => console.error("Erro ao obter localização: ", erro),
                     { enableHighAccuracy: true }
@@ -283,65 +236,82 @@ $conn->close();
             } else {
                 alert("Geolocalização não suportada pelo seu navegador.");
             }
+            setInterval(atualizarLocalizacaoUsuario1, 3000);
+        }
+        function atualizarLocalizacaoUsuario1() {
+            fetch(`usuario2.php?obter_localizacao_usuario1=1&id_emergencia=<?= $id_emergencia ?>`)
+                .then(response => response.json())
+                .then(localizacao => {
+                    if (localizacao && localizacao.latitude && localizacao.longitude) {
+                        const coordenadas = {
+                            lat: parseFloat(localizacao.latitude),
+                            lng: parseFloat(localizacao.longitude)
+                        };
+                        
+                        if (marcaUsuario1) {
+                            marcaUsuario1.setPosition(coordenadas);
+                        }
+                    }
+                })
+                .catch(error => console.error("Erro ao obter localização:", error));
         }
         document.getElementById('enviar-resposta').addEventListener('click', function() {
             const respostaInput = document.getElementById('resposta');
             const resposta = respostaInput.value.trim();          
             if (resposta === '') return;            
             fetch('usuario2.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `id_emergencia=<?= $id_emergencia ?>&resposta=${encodeURIComponent(resposta)}`
-}).then(response => {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `id_emergencia=<?= $id_emergencia ?>&resposta=${encodeURIComponent(resposta)}`
+            }).then(response => {
                 if (response.ok) {
                     respostaInput.value = '';
                     atualizarChat();
                 }
             }).catch(error => console.error("Erro ao enviar resposta:", error));
-        });
+        }); 
         function atualizarChat() {
-            fetch(`usuario1.php?id_emergencia=<?= $id_emergencia ?>&obter_mensagens=1`)
-        .then(response => response.json())
-        .then(mensagens => {
-            const chatBox = document.getElementById('chat-box');           
-            const mensagensAtuais = {};
-            mensagens.forEach(msg => mensagensAtuais[msg.id] = msg);           
-            mensagens.forEach(msg => {
-                let elementoMsg = document.getElementById(`msg-${msg.id}`);
-             
-                if (!elementoMsg) {
-                    elementoMsg = document.createElement('div');
-                    elementoMsg.className = 'chat-message';
-                    elementoMsg.id = `msg-${msg.id}`;
-                    chatBox.appendChild(elementoMsg);
-                }
-                if (msg.mensagem) {
-                    elementoMsg.innerHTML = `
-                        <div class="message-content">
-                            <strong>${msg.telefone}:</strong> ${msg.mensagem}
-                        </div>
-                        <div class="data-hora">${new Date(msg.data_hora).toLocaleString()}</div>
-                    `;
-                } else if (msg.resposta) {
-                    elementoMsg.innerHTML = `
-                        <div class="message-content">
-                            <strong><?= htmlspecialchars(ucfirst($emergencia_selecionada['tipo_emergencia'])) ?>:</strong> ${msg.resposta}
-                        </div>
-                        <div class="data-hora">${new Date(msg.data_hora).toLocaleString()}</div>
-                    `;
-                }
-            });
-            const elementosMsg = chatBox.querySelectorAll('.chat-message');
-            elementosMsg.forEach(elemento => {
-                const id = parseInt(elemento.id.split('-')[1]);
-                if (!mensagensAtuais[id]) {
-                    elemento.remove();
-                }
-            });           
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }).catch(error => console.error("Erro ao atualizar chat:", error));
-}
-setInterval(() => {atualizarChat();}, 300);
+            fetch(`usuario2.php?id_emergencia=<?= $id_emergencia ?>&obter_mensagens=1`)
+                .then(response => response.json())
+                .then(mensagens => {
+                    const chatBox = document.getElementById('chat-box');           
+                    const mensagensAtuais = {};
+                    mensagens.forEach(msg => mensagensAtuais[msg.id] = msg);           
+                    mensagens.forEach(msg => {
+                        let elementoMsg = document.getElementById(`msg-${msg.id}`);
+                        if (!elementoMsg) {
+                            elementoMsg = document.createElement('div');
+                            elementoMsg.className = 'chat-message';
+                            elementoMsg.id = `msg-${msg.id}`;
+                            chatBox.appendChild(elementoMsg);
+                        }
+                        if (msg.mensagem) {
+                            elementoMsg.innerHTML = `
+                                <div class="message-content">
+                                    <strong>${msg.telefone}:</strong> ${msg.mensagem}
+                                </div>
+                                <div class="data-hora">${new Date(msg.data_hora).toLocaleString()}</div>
+                            `;
+                        } else if (msg.resposta) {
+                            elementoMsg.innerHTML = `
+                                <div class="message-content">
+                                    <strong><?= htmlspecialchars(ucfirst($emergencia_selecionada['tipo_emergencia'])) ?>:</strong> ${msg.resposta}
+                                </div>
+                                <div class="data-hora">${new Date(msg.data_hora).toLocaleString()}</div>
+                            `;
+                        }
+                    });
+                    const elementosMsg = chatBox.querySelectorAll('.chat-message');
+                    elementosMsg.forEach(elemento => {
+                        const id = parseInt(elemento.id.split('-')[1]);
+                        if (!mensagensAtuais[id]) {
+                            elemento.remove();
+                        }
+                    });           
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }).catch(error => console.error("Erro ao atualizar chat:", error));
+        }
+        setInterval(atualizarChat, 300);
         document.getElementById('btn-atendimento').addEventListener('click', function() {
             enviarStatus('em_atendimento');
         });
@@ -377,39 +347,11 @@ setInterval(() => {atualizarChat();}, 300);
                 }).catch(error => console.error("Erro ao verificar status:", error));
         }
         setInterval(verificarStatus, 300);
-     document.querySelectorAll('form').forEach(form => {
+            document.querySelectorAll('form').forEach(form => {
             form.addEventListener('submit', e => e.preventDefault());
         });
-        setInterval(() => {
-            const localizacaoUsuario1 = JSON.parse(localStorage.getItem('localizacaoUsuario1'));
-            if (localizacaoUsuario1 && marcaUsuario2) {
-                const coordenadas = {
-                    lat: localizacaoUsuario1.latitude || localizacaoUsuario1.lat,
-                    lng: localizacaoUsuario1.longitude || localizacaoUsuario1.lng
-                };
-                
-                if (!marcaUsuario1) {
-    marcaUsuario1 = new google.maps.Marker({
-        position: coordenadas,
-        map: mapa,
-        title: "usuário"
-    });
-    new google.maps.InfoWindow({
-        content: `
-            <div>
-                <strong>Telefone:</strong> <?= $emergencia_selecionada['telefone'] ?><br>
-                <strong>Nome:</strong> <?= $emergencia_selecionada['nome'] ?>
-            </div>
-        `
-    }).open(mapa, marcaUsuario1);
-} else {
-    marcaUsuario1.setPosition(coordenadas);
-}
-            }
-        }, 300);
     </script>
     <?php endif; ?>
-    
     <div vw class="enabled">
         <div vw-access-button class="active"></div>
         <div vw-plugin-wrapper>
