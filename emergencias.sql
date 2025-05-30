@@ -37,11 +37,14 @@ CREATE TABLE IF NOT EXISTS emergencias (
     data_hora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     latitude DECIMAL(10, 8),
     longitude DECIMAL(11, 8),
+    latitude_atendente DECIMAL(10, 8),
+    longitude_atendente DECIMAL(11, 8),
     em_atendimento BOOLEAN DEFAULT FALSE,
     resolvida BOOLEAN DEFAULT FALSE,
     PRIMARY KEY (id),
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
 ) 
+
 
 
 
