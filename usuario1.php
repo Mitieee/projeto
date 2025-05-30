@@ -66,10 +66,7 @@ if (isset($_GET['id_emergencia']) && isset($_GET['obter_mensagens'])) {
 if (isset($_GET['obter_localizacao_usuario2'])) {
     header('Content-Type: application/json');
     $id_emergencia = $_GET['id_emergencia']; 
-    $sql = "SELECT e.latitude, e.longitude, u.nome, u.telefone 
-            FROM emergencias e 
-            JOIN usuarios u ON e.id_usuario = u.id 
-            WHERE e.id = ?";
+    $sql = "SELECT latitude_atendente, longitude_atendente FROM emergencias WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id_emergencia);
     $stmt->execute();
@@ -152,28 +149,64 @@ $conn->close();
     <title>Usuário 1 - Localização Compartilhada</title>
     <link rel="icon" href="imagem/emergencia.png" type="image/x-icon">
     <style>
-        #map { height: 450px; width: 100%; }
-        body { display: flex; flex-direction: column; align-items: center; margin: 0; font-family: Arial; }
-        .container { max-width: 400px; padding: 20px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); text-align: center; }
-        .img { height: 30px; width: 30px; cursor: pointer; }
-        .chat-box { margin-top: 20px; border: 1px solid #ddd; border-radius: 5px; padding: 10px; height: 200px; overflow-y: auto; background-color: #f9f9f9; }
-        .chat-input { margin-top: 10px; display: flex; gap: 10px; }
-        .chat-input input { flex: 1; padding: 5px; border: 1px solid #ddd; border-radius: 5px; }
-        .chat-input button { padding: 5px 10px; border: none; background-color: #007BFF; color: white; border-radius: 5px; cursor: pointer; }
+        #map { height: 450px;
+              width: 100%; }
+        body { display: flex; 
+              flex-direction: column; 
+              align-items: center; 
+              margin: 0; font-family: Arial; }
+        .container { max-width: 400px;
+                    padding: 20px;
+                    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+                    text-align: center; }
+        .img { height: 30px; 
+              width: 30px;
+              cursor: pointer; }
+        .chat-box { margin-top: 20px;
+                   border: 1px solid #ddd; 
+                   border-radius: 5px; padding: 10px; 
+                   height: 200px; overflow-y: auto; 
+                   background-color: #f9f9f9; }
+        .chat-input { margin-top: 10px; 
+                     display: flex; gap: 10px; }
+        .chat-input input { flex: 1;
+                           padding: 5px; 
+                           border: 1px solid #ddd;
+                           border-radius: 5px; }
+        .chat-input button { padding: 5px 10px; 
+                            border: none; 
+                            background-color: #007BFF; color: white;
+                            border-radius: 5px; 
+                            cursor: pointer; }
         .chat-input button:hover { background-color: #0056b3; }
-        .chat-buttons button { margin-left: 5px; padding: 2px 5px; border: none; border-radius: 3px; cursor: pointer; }
-        .chat-buttons .editar { background-color: #28a745; color: white; }
-        .chat-buttons .cancelar { background-color: #dc3545; color: white; }
-        .chat-buttons .reclamar { background-color: #ffc107; color: white; }
-        .chat-buttons .reenviar { background-color: #6c757d; color: white; }
-        .chat-buttons .img { width: 16px; height: 16px; margin-right: 5px; vertical-align: middle; }
-        .status { font-weight: bold; margin: 10px 0; }
+        .chat-buttons button { margin-left: 5px; 
+                              padding: 2px 5px; border: none; 
+                              border-radius: 3px; 
+                              cursor: pointer; }
+        .chat-buttons .editar { background-color: #28a745; 
+                               color: white; }
+        .chat-buttons .cancelar { background-color: #dc3545; 
+                                 color: white; }
+        .chat-buttons .reclamar { background-color: #ffc107; 
+                                 color: white; }
+        .chat-buttons .reenviar { background-color: #6c757d; 
+                                 color: white; }
+        .chat-buttons .img { width: 16px; 
+                            height: 16px; 
+                            margin-right: 5px;
+                            vertical-align: middle; }
+        .status { font-weight: bold; 
+                 margin: 10px 0; }
         .status.atendimento { color: #17a2b8; }
         .status.resolvida { color: #28a745; }
         .message-content { margin-bottom: 5px; }
         .data-hora { font-size: 0.8em; color: #666; }
-        .remetente { background-color: #e3f2fd; padding: 8px; margin-bottom: 8px; border-radius: 5px; }
-        .destinatario { background-color: #f1f1f1; padding: 8px; margin-bottom: 8px; border-radius: 5px; }
+        .remetente { background-color: #e3f2fd;
+                    padding: 8px; 
+                    margin-bottom: 8px; border-radius: 5px; }
+        .destinatario { background-color: #f1f1f1;
+                       padding: 8px; 
+                       margin-bottom: 8px; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -190,8 +223,8 @@ $conn->close();
             <button type="button" id="enviar-mensagem">Enviar</button>
         </form>
     </div>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo $apiKey; ?>&callback=initMap"></script>
-    <script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo $apiKey; ?>&callback=initMap"></script>
+    <script>     
         let mapa, marcaUsuario1, marcaUsuario2;
         function initMap() {
             const coordenadas = {
@@ -247,10 +280,10 @@ $conn->close();
             fetch(`usuario1.php?obter_localizacao_usuario2=1&id_emergencia=<?= $id_emergencia ?>`)
                 .then(response => response.json())
                 .then(localizacao => {
-                    if (localizacao && localizacao.latitude && localizacao.longitude) {
+                    if (localizacao && localizacao.latitude_atendente && localizacao.longitude_atendente) {
                         const coordenadas = {
-                            lat: parseFloat(localizacao.latitude),
-                            lng: parseFloat(localizacao.longitude)
+                            lat: parseFloat(localizacao.latitude_atendente),
+                            lng: parseFloat(localizacao.longitude_atendente)
                         };
                         if (!marcaUsuario2) {
                             marcaUsuario2 = new google.maps.Marker({
