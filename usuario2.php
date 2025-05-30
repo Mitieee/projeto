@@ -2,6 +2,26 @@
 include 'db.php';
 session_start();
 $apiKey = getenv('Key');
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['latitude_atendente']) && isset($_POST['longitude_atendente']))
+ {
+    if (!isset($_SESSION['id_usuario'])) {
+        header("HTTP/1.1 401 Unauthorized");
+        exit();
+    }
+    $latitude = $_POST['latitude_atendente'];
+    $longitude = $_POST['longitude_atendente'];
+    $id_emergencia = $_POST['id_emergencia'];
+    $sql = "UPDATE emergencias SET latitude_atendente = ?, longitude_atendente = ? WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ddi", $latitude, $longitude, $id_emergencia);
+    if ($stmt->execute()) {
+        echo json_encode(['success' => true]);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Erro']);
+    }   
+    $stmt->close();
+    exit();
+}
 if (isset($_GET['status_acao'])) {
     header('Content-Type: application/json');
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_emergencia']) && isset($_POST['status'])) {
@@ -45,7 +65,7 @@ if (isset($_GET['obter_localizacao_usuario1'])) {
             WHERE id = ? AND id_usuario IN 
             (SELECT id_usuario FROM emergencias WHERE id = ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ii", $id_emergencia, $id_emergencia);
+    $stmt->bind_param("i", $id_emergencia);
     $stmt->execute();
     $result = $stmt->get_result();
     $localizacao = $result->fetch_assoc();
@@ -186,20 +206,20 @@ $conn->close();
         <?php endif; ?>
     </div>
     <?php if ($emergencia_selecionada && $emergencia_selecionada['latitude'] && $emergencia_selecionada['longitude']): ?>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo $apiKey; ?>&callback=initMap"></script>
+       <script async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo $apiKey; ?>&callback=initMap"></script>  
     <script>     
         let mapa, marcaUsuario1, marcaUsuario2;
         function initMap() {
-            const localizacaoEmergencia = {
+            const coordenadas = {
                 lat: <?= $emergencia_selecionada['latitude'] ?>,
                 lng: <?= $emergencia_selecionada['longitude'] ?>
             };            
             mapa = new google.maps.Map(document.getElementById('map'), {
-                center: localizacaoEmergencia,
+                center: coordenadas,
                 zoom: 15
             });
             marcaUsuario1 = new google.maps.Marker({
-                position: localizacaoEmergencia,
+                position: coordenadas,
                 map: mapa,
                 title: "usuário"
             });           
@@ -214,10 +234,27 @@ $conn->close();
             if (navigator.geolocation) {
                 navigator.geolocation.watchPosition(
                     (posicao) => {
-                        const coordenadas = {
+                        const novaPosicao = {
                             lat: posicao.coords.latitude,
                             lng: posicao.coords.longitude
                         };
+                        enviarLocalizacao2(novaPosicao.lat, novaPosicao.lng);
+                        function enviarLocalizacao2(latitude, longitude) {
+                            const formData = new FormData();
+            formData.append('latitude_atendente', latitude);
+            formData.append('longitude_atendente', longitude);
+            formData.append('id_emergencia', <?= $emergencia_selecionada['id'] ?>);  
+            fetch('usuario2.php', {
+                method: 'POST',
+                body: formData
+            })
+.then(response => {
+                if (!response.ok) throw new Error('Erro na rede');
+                return response.text();
+            })
+            .then(data => console.log('Localização atualizada:', data))
+            .catch(error => console.error("Erro ao enviar localização:", error));
+        }
                         if (!marcaUsuario2) {
                             marcaUsuario2 = new google.maps.Marker({
                                 position: coordenadas,
@@ -228,7 +265,6 @@ $conn->close();
                         } else {
                             marcaUsuario2.setPosition(coordenadas);
                         }
-                        mapa.setCenter(coordenadas);
                     },
                     (erro) => console.error("Erro ao obter localização: ", erro),
                     { enableHighAccuracy: true }
