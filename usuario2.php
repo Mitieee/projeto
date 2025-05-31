@@ -257,13 +257,13 @@ $conn->close();
         }
                         if (!marcaUsuario2) {
                             marcaUsuario2 = new google.maps.Marker({
-                                position: coordenadas,
+                                position: novaPosicao,
                                 map: mapa,
                                 title: "Você está aqui"
                             });
                             new google.maps.InfoWindow({ content: "Você está aqui" }).open(mapa, marcaUsuario2);
                         } else {
-                            marcaUsuario2.setPosition(coordenadas);
+                            marcaUsuario2.setPosition(novaPosicao);
                         }
                     },
                     (erro) => console.error("Erro ao obter localização: ", erro),
