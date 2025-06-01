@@ -158,7 +158,8 @@ $conn->close();
         .info-usuario h3 { margin-top: 0; color: #007BFF; }
         .info-item { margin-bottom: 5px; }
         .message-content { margin-bottom: 5px; }
-        .data-hora { font-size: 0.8em; color: #666; }
+        .data-hora { font-size: 0.8em; 
+        color: #666; }
     </style>
 </head>
 <body>
