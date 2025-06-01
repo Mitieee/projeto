@@ -66,9 +66,9 @@ if (isset($_GET['id_emergencia']) && isset($_GET['obter_mensagens'])) {
 if (isset($_GET['obter_localizacao_usuario2'])) {
     header('Content-Type: application/json');
     $id_emergencia = $_GET['id_emergencia']; 
-     $sql = "SELECT e.latitude_atendente as latitude, e.longitude_atendente as longitude 
-            FROM emergencias
-            WHERE e.id = ?";
+     $sql = "SELECT latitude_atendente AS latitude, longitude_atendente AS longitude 
+FROM emergencias 
+WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id_emergencia);
     $stmt->execute();
